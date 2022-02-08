@@ -1,0 +1,220 @@
+Ejemplo en Java
+Presentamos a continuación un pequeño ejemplo de uso del patrón escrito en Java. El código Java correspondiente a la clase abstracta Automovil y sus subclases aparece a continuación. Es muy sencillo, describe los cuatro atributos de los automóviles así como el método mostrarCaracteristicas que permite visualizarlas.
+
+
+public abstract class Automovil  
+{  
+  protected String modelo;  
+  protected String color;  
+  protected int potencia;  
+  protected double espacio;  
+  
+  public Automovil(String modelo, String color, int  
+    potencia, double espacio)  
+  {  
+    this.modelo = modelo;  
+    this.color = color;  
+    this.potencia = potencia;  
+    this.espacio = espacio;  
+  }  
+  
+  public abstract void mostrarCaracteristicas();  
+}  
+  
+  
+ 
+  
+public class AutomovilElectricidad extends Automovil  
+{  
+  public AutomovilElectricidad(String modelo, String  
+    color, int potencia, double espacio)  
+  { 
+    super(modelo, color, potencia, espacio); 
+  } 
+  
+  public void mostrarCaracteristicas()  
+  {  
+    System.out.println( 
+      "Automovil electrico de modelo: " + modelo +   
+      " de color: " + color + " de potencia: " +  
+      potencia + " de espacio: " + espacio);  
+  }  
+}  
+  
+public class AutomovilGasolina extends Automovil  
+{  
+  public AutomovilGasolina(String modelo, String  
+    color, int potencia, double espacio)   
+  { 
+    super(modelo, color, potencia, espacio); 
+  } 
+  
+  public void mostrarCaracteristicas()  
+  {  
+    System.out.println(  
+      "Automovil de gasolina de modelo: " + modelo +   
+      " de color: " + color + " de potencia: " +  
+      potencia + " de espacio: " + espacio);  
+  }  
+}
+ 
+El código Java correspondiente a la clase abstracta Scooter y sus subclases aparece a continuación. Es similar al de los automóviles, salvo por el atributo espacio que no existe para las scooters.
+
+
+using System;  
+  
+public abstract class Scooter  
+{  
+  protected String modelo;  
+  protected String color;  
+  protected int potencia;  
+  
+  public Scooter(String modelo, String color, int potencia)  
+  {  
+    this.modelo = modelo;  
+    this.color = color;  
+    this.potencia = potencia;  
+  }  
+  public abstract void mostrarCaracteristicas();  
+}  
+  
+public class ScooterElectricidad extends Scooter  
+{  
+  public ScooterElectricidad(String modelo, String color,  
+    int potencia)  
+  {  
+    super(modelo, color, potencia); 
+  }  
+  
+  public void mostrarCaracteristicas()  
+  {  
+    System.out.println("Scooter electrica de modelo: " +  
+      modelo + " de color: " + color +   
+      " de potencia: " + potencia);  
+  }  
+  
+}  
+  
+public class ScooterGasolina extends Scooter  
+{  
+  public ScooterGasolina(String modelo, String color,  
+    int potencia)  
+  { 
+    super(modelo, color, potencia);  
+  } 
+  
+  public void mostrarCaracteristicas()  
+  {  
+    System.out.println("Scooter de gasolina de modelo: " +  
+      modelo + " de color: " + color +   
+      " de potencia: " + potencia);  
+  }  
+  
+}
+ 
+Ahora podemos introducir la interfaz FabricaVehiculo y sus dos clases de implementación, una para cada familia (eléctrico/gasolina). Es fácil darse cuenta de que sólo las clases de implementación utilizan las clases concretas de los vehículos.
+
+
+public interface FabricaVehiculo  
+{  
+  Automovil creaAutomovil(String modelo, String color,  
+    int potencia, double espacio);  
+  
+  Scooter creaScooter(String modelo, String color, int  
+    potencia);  
+}  
+  
+public class FabricaVehiculoElectricidad implements FabricaVehiculo  
+{  
+  public Automovil creaAutomovil(String modelo, String  
+    color, int potencia, double espacio)  
+  {  
+    return new AutomovilElectricidad(modelo, color,  
+      potencia, espacio);  
+  }  
+  
+  public Scooter creaScooter(String modelo, String  
+    color, int potencia)  
+  {  
+    return new ScooterElectricidad(modelo, color,  
+      potencia);  
+  }  
+}  
+  
+public class FabricaVehiculoGasolina implements FabricaVehiculo  
+{  
+  public Automovil creaAutomovil(String modelo, String  
+    color, int potencia, double espacio)  
+  {  
+    return new AutomovilGasolina(modelo, color,  
+      potencia, espacio);  
+  }  
+  
+  public Scooter creaScooter(String modelo, String  
+    color, int potencia)  
+  {  
+    return new ScooterGasolina(modelo, color, potencia);  
+  }  
+}
+ 
+Por último, se presenta el código fuente Java del cliente de la fábrica, a saber el catálogo que es, en nuestro ejemplo, el programa principal. Por motivos de simplicidad, el catálogo solicita al comienzo la fábrica que se quiere utilizar (electricidad o gasolina). Esta fábrica debería proporcionarse como parámetro al catálogo.
+
+El resto del programa es totalmente independiente de la familia de objetos, respetando el objetivo del patrón Abstract Factory.
+
+
+import java.util.*;  
+public class Catalogo  
+{  
+  public static int nAutos = 3;  
+  public static int nScooters = 2;  
+  
+  public static void main(String[] args)  
+  {  
+    Scanner reader = new Scanner(System.in);  
+    FabricaVehiculo fabrica;  
+    Automovil[] autos = new Automovil[nAutos];  
+    Scooter[] scooters = new Scooter[nScooters];  
+    System.out.print("Desea utilizar " +  
+      "vehiculos electricos (1) o a gasolina (2):");  
+    String eleccion = reader.next();  
+    if (eleccion.equals("1"))  
+    {  
+      fabrica = new FabricaVehiculoElectricidad();  
+    }  
+    else  
+    {  
+      fabrica = new FabricaVehiculoGasolina();  
+    }  
+    for (int index = 0; index < nAutos; index++)  
+      autos[index] = fabrica.creaAutomovil("estandar",   
+        "amarillo", 6+index, 3.2);  
+    for (int index = 0; index < nScooters; index++)  
+      scooters[index] = fabrica.creaScooter("clasico",   
+        "rojo", 2+index);  
+    for (Automovil auto: autos)  
+      auto.mostrarCaracteristicas();  
+    for (Scooter scooter: scooters)  
+      scooter.mostrarCaracteristicas();  
+  }  
+}
+ 
+A continuación se muestra un ejemplo de ejecución para vehículos eléctricos:
+
+
+Desea utilizar vehiculos electricos (1)   
+o a gasolina (2): 1  
+Automovil electrico de modelo: estandar de color:   
+amarillo de potencia: 6   
+de espacio: 3.2  
+Automovil electrico de modelo: estandar de color:   
+amarillo de potencia: 7   
+de espacio: 3.2  
+Automovil electrico de modelo: estandar de color:   
+amarillo de potencia: 8   
+de espacio: 3.2  
+Scooter electrica de modelo: clasico de color:   
+rojo de potencia: 2  
+Scooter electrica de modelo: clasico de color:   
+rojo de potencia: 3
+ 
+En este ejemplo de ejecución se ha creado una fábrica de vehículos eléctricos, de modo que el catálogo se compone de automóviles y scooters eléctricos.
