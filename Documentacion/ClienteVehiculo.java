@@ -5,8 +5,8 @@ import builders.ConstructorDocumentacionVehiculoPdf;
 import documentacion.Documentacion;
 import vendedor.Vendedor; 
 
-public class ClienteVehiculo  
-{  
+public class ClienteVehiculo{ 
+    
     public static void main(String[] args)  
     {  
         Scanner reader = new Scanner(System.in);  
