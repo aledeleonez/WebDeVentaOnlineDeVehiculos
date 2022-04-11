@@ -1,7 +1,7 @@
 package pedidos;
 
-public abstract class Pedido  
-{  
+public abstract class Pedido{  
+    
     protected double importe;  
   
     public Pedido(double importe)  
